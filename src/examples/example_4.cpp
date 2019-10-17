@@ -37,7 +37,7 @@ int main(int argc, char **argv)
 		// pcl::io::savePLYFileASCII("PointCloudGpcator.ply",*p_cloud_);
 
 		//Just check point cloud dimensions
-		//std::cout << "p_cloud_ size is: " << p_cloud_->width << std::endl;
+		std::cout << "p_cloud_ size is: " << p_cloud_->width << std::endl;
 
 		//visualization starts here
 		pcl::visualization::PointCloudColorHandlerCustom<pcl::PointXYZ> p_cloud_color_handler(p_cloud_, 255, 255, 255);
@@ -47,7 +47,7 @@ int main(int argc, char **argv)
 		viewer_.setBackgroundColor(0.05, 0.05, 0.05, 0); // Setting background to a dark grey
 		viewer_.setPointCloudRenderingProperties (pcl::visualization::PCL_VISUALIZER_POINT_SIZE, 2, "snapshot");
 		viewer_.setPosition(300,200); // Setting visualiser window position
-		viewer_.spinOnce (1000);
+		viewer_.spinOnce (10);
 }
 	//bye
 return 1;

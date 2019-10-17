@@ -13,6 +13,7 @@
 //PCL
 #include <pcl/point_types.h>
 #include <pcl/io/pcd_io.h>
+#include <pcl/filters/filter.h>
 
 //constants
 // sensor IP address

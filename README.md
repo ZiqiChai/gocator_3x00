@@ -39,3 +39,11 @@ ifndef config
 endif
 ```
 Note: the CMakeLists.txt is already adjusted so that it can link to LIBS in different folders according to different build types in CMakeLists.txt.
+
+Improvements:
+
+1. This is pure cmake project.
+
+2. This project is tested under ubuntu14.04 and ubuntu18.04, with GoSdk4.2 and GoSdk5.2, under "Debug" and "Release" Build Type.
+
+3. Sometimes, the gocator sensor send back only stamp data, in this case, after call for point cloud data, you can only get empty point cloud, this borther me a lot. Now that I have notice the reason why I got empty data, I add judgment in 'getSingleSnapshot()' to make sure I get not empty point cloud data and I also remove the -inf data, so finally I have got real data. This also helps to fix the same problem in original ros package, otherwise you get empty data after calling ros servise.
