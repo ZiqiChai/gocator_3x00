@@ -7,7 +7,7 @@
 #include <pcl/visualization/pcl_visualizer.h>
 
 //Gocator3100 Lib
-#include "../gocator3100.h"
+#include "gocator3100.h"
 
 //constants
 #define SENSOR_IP "192.168.1.10"
