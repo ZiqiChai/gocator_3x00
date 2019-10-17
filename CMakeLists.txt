@@ -37,7 +37,7 @@ endif()
 
 # OpenCV
 set(CUDA_USE_STATIC_CUDA_RUNTIME OFF)
-FIND_PACKAGE( OpenCV 2.4.8 REQUIRED )
+FIND_PACKAGE( OpenCV REQUIRED )
 INCLUDE_DIRECTORIES(${OpenCV_INCLUDE_DIRS})
 LINK_DIRECTORIES(${OpenCV_LIBRARY_DIRS})
 ADD_DEFINITIONS(${OpenCV_DEFINITIONS})
@@ -50,38 +50,63 @@ ADD_DEFINITIONS(${PCL_DEFINITIONS})
 
 # GoSDK and KAPI
 # Set GO_SDK header files (That is different names for Sdk5.x )
-SET(GO_SDK_4 ~/GO_SDK)
+SET(GO_SDK ~/GO_SDK)
 FIND_PATH(
     GOCATOR_INCLUDES
     NAMES GoSdk/GoSdk.h
-    PATHS ${GO_SDK_4}/Gocator/GoSdk)
+    PATHS ${GO_SDK}/Gocator/GoSdk)
 FIND_PATH(
     KAPI_INCLUDES
     NAMES kApi/kApi.h
-    PATHS ${GO_SDK_4}/Platform/kApi)
-INCLUDE_DIRECTORIES(${GOCATOR_INCLUDES} ${KAPI_INCLUDES})
+    PATHS ${GO_SDK}/Platform/kApi)
+INCLUDE_DIRECTORIES(${GOCATOR_INCLUDES} ${KAPI_INCLUDES} ./include)
 
-# Set GO_SDK libs (That is different names for Sdk5.x )
+# Set GO_SDK libs (That is the same name for both GoSDK4.x and GoSDK5.x )
+
+# Release Version
+if(${CMAKE_BUILD_TYPE} STREQUAL "Release")
+message("CMAKE_BUILD_TYPE is Release")
 FIND_LIBRARY(
     GOCATOR_LIBRARIES
     NAMES GoSdk
-    PATHS ${GO_SDK_4}/lib/linux_x64d/) 
+    PATHS ${GO_SDK}/lib/linux_x64/) 
 FIND_LIBRARY(
     KAPI_LIBRARIES
     NAMES kApi
-    PATHS ${GO_SDK_4}/lib/linux_x64d/)
-
+    PATHS ${GO_SDK}/lib/linux_x64/)
 message(STATUS "Gocator Headers   found at ${GOCATOR_INCLUDES}.")
 message(STATUS "Gocator Libraries found at ${GOCATOR_LIBRARIES}.")
+endif()
+
+# Debug Version
+if(${CMAKE_BUILD_TYPE} STREQUAL "Debug")
+FIND_LIBRARY(
+    GOCATOR_LIBRARIES
+    NAMES GoSdk
+    PATHS ${GO_SDK}/lib/linux_x64d/) 
+FIND_LIBRARY(
+    KAPI_LIBRARIES
+    NAMES kApi
+    PATHS ${GO_SDK}/lib/linux_x64d/)
+message(STATUS "Gocator Headers   found at ${GOCATOR_INCLUDES}.")
+message(STATUS "Gocator Libraries found at ${GOCATOR_LIBRARIES}.")
+endif()
+
+
 
 # Build library
 # Set source files
-SET(SRCS src/gocator3100.cpp)
+SET(SRCS src/gocator3100.cpp src/gocator3200.cpp)
 # Set header files 
-SET(HDRS src/gocator3100.h)
+SET(HDRS include/gocator3100.h include/gocator3200.h)
 # Add library
 ADD_LIBRARY(${PROJECT_NAME}_LIB SHARED ${SRCS})
 TARGET_LINK_LIBRARIES(${PROJECT_NAME}_LIB ${GOCATOR_LIBRARIES} ${KAPI_LIBRARIES} ${PCL_LIBRARIES} ${OpenCV_LIBS})
 
 #Build examples 
 ADD_SUBDIRECTORY(src/examples)
+
+
+# Build demo_3200
+ADD_EXECUTABLE(demo_3200 src/demo_3200.cpp)
+TARGET_LINK_LIBRARIES(demo_3200 ${PROJECT_NAME}_LIB)
